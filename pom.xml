@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>no.difi.vefa</groupId>
+    <artifactId>vefa-sbdh</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>vefa-sbdh-core</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <name>vefa-sbdh</name>
+
+    <url>FIXME</url>
+    <description>
+        Library for producing and consuming various variants of Standard Business Documents
+        according to the UN/CEFACT SBDH TS v1.3
+    </description>
+    <organization>
+        <name>Norwegian Agency for Public Management and eGovernment</name>
+        <url>http://www.difi.no</url>
+    </organization>
+    <developers>
+        <developer>
+            <name>Steinar Overbeck Cook</name>
+            <organization>Difi</organization>
+            <roles>
+                <role>Principal author</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <difi.commons.sbdh.version>0.9.0</difi.commons.sbdh.version>
+        <difi.commons.asic.version>0.9.1</difi.commons.asic.version>
+    </properties>
+    <dependencyManagement>
+
+        <dependencies>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>6.8.1</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- The JAXB classes pertaining to SBDH -->
+            <dependency>
+                <groupId>no.difi.commons</groupId>
+                <artifactId>commons-sbdh</artifactId>
+                <version>${difi.commons.sbdh.version}</version>
+            </dependency>
+
+            <!-- The Difi implementation of ASiC archive -->
+            <dependency>
+                <groupId>no.difi.commons</groupId>
+                <artifactId>commons-asic</artifactId>
+                <version>${difi.commons.asic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.7</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.0.7</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <!-- Inherited by all sub projects -->
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
