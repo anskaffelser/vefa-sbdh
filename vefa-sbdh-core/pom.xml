@@ -23,26 +23,10 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
         </dependency>
-        <dependency>
-            <groupId>no.difi.commons</groupId>
-            <artifactId>commons-sbdh</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.difi.vefa</groupId>
-            <artifactId>vefa-esubmission</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <!-- Must exclude these to prevent multiple instances of the JAXB generated classes -->
-            <exclusions>
-                <exclusion>
-                    <groupId>no.difi.commons</groupId>
-                    <artifactId>commons-ubl21</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <dependency>
             <groupId>no.difi.commons</groupId>
-            <artifactId>commons-asic</artifactId>
+            <artifactId>commons-sbdh</artifactId>
         </dependency>
 
         <dependency>
@@ -52,16 +36,16 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.8</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
+            <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
         </dependency>
 
     </dependencies>
