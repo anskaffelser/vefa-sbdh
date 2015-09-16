@@ -1,6 +1,6 @@
 # Ignore these files
 /.idea
-/target
+*/target/
 target/
 *.log
 .settings
