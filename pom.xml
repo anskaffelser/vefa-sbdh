@@ -3,13 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.difi.vefa</groupId>
-    <artifactId>vefa-sbdh</artifactId>
+    <artifactId>sbdh</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>vefa-sbdh</name>
 
-    <url>FIXME</url>
+    <url>https://github.com/difi/vefa-sbdh</url>
+
     <description>
         Library for producing and consuming various variants of Standard Business Documents
         according to the UN/CEFACT SBDH TS v1.3
@@ -34,50 +35,49 @@
         <difi.commons.asic.version>0.9.1</difi.commons.asic.version>
     </properties>
 
-        <dependencies>
-            <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>6.8.1</version>
-                <scope>test</scope>
-            </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.8.1</version>
+            <scope>test</scope>
+        </dependency>
 
-            <!-- The JAXB classes pertaining to SBDH -->
-            <dependency>
-                <groupId>no.difi.commons</groupId>
-                <artifactId>commons-sbdh</artifactId>
-                <version>${difi.commons.sbdh.version}</version>
-            </dependency>
+        <!-- The JAXB classes pertaining to SBDH -->
+        <dependency>
+            <groupId>no.difi.commons</groupId>
+            <artifactId>commons-sbdh</artifactId>
+            <version>${difi.commons.sbdh.version}</version>
+        </dependency>
 
-            <!-- The Difi implementation of ASiC archive -->
-            <dependency>
-                <groupId>no.difi.commons</groupId>
-                <artifactId>commons-asic</artifactId>
-                <version>${difi.commons.asic.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.7.7</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>1.0.7</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.8</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.4</version>
-            </dependency>
-
-
-        </dependencies>
+        <!-- The Difi implementation of ASiC archive -->
+        <dependency>
+            <groupId>no.difi.commons</groupId>
+            <artifactId>commons-asic</artifactId>
+            <version>${difi.commons.asic.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <!-- Inherited by all sub projects -->
