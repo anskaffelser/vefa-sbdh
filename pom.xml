@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.difi.vefa</groupId>
-    <artifactId>vefa-sbdh</artifactId>
+    <artifactId>sbdh</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>VEFA SBDH</name>
+    <name>vefa-sbdh</name>
     <description>
         Library for producing and consuming various variants of Standard Business Documents
         according to the UN/CEFACT SBDH TS v1.3
