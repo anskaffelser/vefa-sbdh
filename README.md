@@ -12,15 +12,16 @@ In order to transport an ASiC archive as payload within a StandardBusinessDocume
 be base64 encoded.
 
 ```java
-  public void wrapSampleData(InputStream inputStream, StandardBusinessDocumentHeader standardBusinessDocumentHeader) throws Exception {
-        SbdWrapper sbdWrapper = new SbdWrapper();
+/** Wraps the ASiC archive supplied in the "inputStream" into a SBD, with the supplied SBDH */
+public void wrapSampleData(InputStream inputStream, StandardBusinessDocumentHeader standardBusinessDocumentHeader) throws Exception {
+    SbdWrapper sbdWrapper = new SbdWrapper();
 
-        File outputFile = File.createTempFile("vefa-sbdh", ".xml");
-        FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+    File outputFile = File.createTempFile("vefa-sbdh", ".xml");
+    FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
-        sbdWrapper.wrapInputStream(standardBusinessDocumentHeader, inputStream, fileOutputStream);
-        log.debug("Wrote sample StandardBusinessDocument into " + outputFile.toString());
-    }
+    sbdWrapper.wrapInputStream(standardBusinessDocumentHeader, inputStream, fileOutputStream);
+    log.debug("Wrote sample StandardBusinessDocument into " + outputFile.toString());
+}
 ```
   
 
