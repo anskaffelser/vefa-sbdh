@@ -1,4 +1,4 @@
-package no.difi.vefa;
+package no.difi.vefa.sbdh;
 
 import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.commons.io.IOUtils;
@@ -62,6 +62,13 @@ public class SbdWrapperTest {
         out.close();
     }
 
+    /**
+     * Performs the actual testing using the SbdWrapper class
+     *
+     * @param inputStream
+     * @param standardBusinessDocumentHeader
+     * @throws Exception
+     */
     @Test(dataProvider = "sampleData", dataProviderClass = SampleDataProvider.class)
     public void wrapSampleData(InputStream inputStream, StandardBusinessDocumentHeader standardBusinessDocumentHeader) throws Exception {
         SbdWrapper sbdWrapper = new SbdWrapper();

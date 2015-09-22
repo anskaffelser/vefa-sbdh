@@ -17,7 +17,7 @@
  * along with Oxalis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package no.difi.vefa;
+package no.difi.vefa.sbdh;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

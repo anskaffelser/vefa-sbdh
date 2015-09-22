@@ -1,4 +1,4 @@
-package no.difi.vefa;
+package no.difi.vefa.sbdh;
 
 import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.commons.io.IOUtils;

@@ -1,5 +1,6 @@
-package no.difi.vefa;
+package no.difi.vefa.sbdh;
 
+import com.javafx.tools.doclets.internal.toolkit.util.DocFinder;
 import org.testng.annotations.DataProvider;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
@@ -15,6 +16,7 @@ import static org.testng.Assert.assertNotNull;
 public class SampleDataProvider {
 
     public static final String SAMPLE_ASIC_ASICE = "sample-asic.asice";
+    public static final String SAMPLE_SBD_XML = "sample-sbd.xml";
 
     @DataProvider(name = "sampleData")
     public static Object[][] creatAsicArchive() {
@@ -33,5 +35,14 @@ public class SampleDataProvider {
         return new Object[][]{{resourceAsStream, sbdh}};
     }
 
+    @DataProvider(name = "sampleSbd")
+    public static Object[][] sampleSbd() {
+        InputStream sbdStream = SampleDataProvider.class.getClassLoader().getResourceAsStream(SAMPLE_SBD_XML);
+        assertNotNull(sbdStream, "Unable to locate " + SAMPLE_SBD_XML + " in class path");
+
+
+        return new Object[][]{ { sbdStream } };
+    }
 
 }
+

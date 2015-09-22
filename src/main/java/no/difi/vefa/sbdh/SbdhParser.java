@@ -1,4 +1,4 @@
-package no.difi.vefa;
+package no.difi.vefa.sbdh;
 
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
