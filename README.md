@@ -23,6 +23,8 @@ public void wrapSampleData(InputStream inputStream, StandardBusinessDocumentHead
     log.debug("Wrote sample StandardBusinessDocument into " + outputFile.toString());
 }
 ```
+
+Please review the [unit tests](src/test/java/no/difi/vefa/sbdh) for further details and examples.
   
 
 ## Extracting base64 encoded ASiC archive from SBD payload
