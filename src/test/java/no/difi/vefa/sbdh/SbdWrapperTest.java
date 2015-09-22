@@ -16,6 +16,7 @@ import java.io.*;
 /**
  * Created by soc on 16.09.2015.
  */
+@SuppressWarnings("ALL")
 public class SbdWrapperTest {
 
     public static final Logger log = LoggerFactory.getLogger(SbdWrapperTest.class);

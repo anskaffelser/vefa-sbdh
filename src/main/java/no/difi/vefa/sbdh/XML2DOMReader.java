@@ -183,9 +183,9 @@ public class XML2DOMReader extends DefaultHandler {
      * If the <em>elemtnToRead</em> has not been seen after reading {@link #START_ELEMENTS_THRESHOLD} start elements,
      * parsing is aborted.
      *
-     * @param inputStream
-     * @param elementToRead
-     * @return
+     * @param inputStream source to parse from
+     * @param elementToRead local name of element at which we cease to read data
+     * @return W3C Document instance parsed from input stream
      */
     public Document parse(InputStream inputStream, String elementToRead) {
         this.elementToRead = elementToRead;
@@ -203,11 +203,7 @@ public class XML2DOMReader extends DefaultHandler {
             return document;
         } catch(StopSaxParserException e){
             return document;
-        } catch (ParserConfigurationException e) {
-            throw new IllegalStateException(e);
-        } catch (SAXException e) {
-            throw new IllegalStateException(e);
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new IllegalStateException(e);
         }
     }

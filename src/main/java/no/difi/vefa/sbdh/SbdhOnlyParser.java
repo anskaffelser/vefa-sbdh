@@ -36,11 +36,11 @@ import java.io.InputStream;
      * held in the supplied input stream.
      *
      * @param inputStream positioned at the start of the first XML element.
-     * @return
+     * @return parse StandardBusinessDocumentHeader instance
      */
     @Override
     public StandardBusinessDocumentHeader parse(InputStream inputStream) {
-        Unmarshaller unmarshaller = null;
+        Unmarshaller unmarshaller;
         try {
             unmarshaller = jaxbContext.createUnmarshaller();
         } catch (JAXBException e1) {
@@ -54,8 +54,7 @@ import java.io.InputStream;
             throw new IllegalStateException("Unable to parse input data into StandardBusinessDocumentHeader", e);
 
         }
-        StandardBusinessDocumentHeader sbdh = (StandardBusinessDocumentHeader) element.getValue();
-        return sbdh;
+        return (StandardBusinessDocumentHeader) element.getValue();
     }
 
 

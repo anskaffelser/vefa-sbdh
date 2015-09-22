@@ -24,9 +24,9 @@ public class SaxAsicExtractor implements AsicExtractor {
 
     @Override
     public void extractAsic(InputStream sbdInputStream, OutputStream outputStream) {
-        boolean doEncode = false;   // We don't want to encode, but decode the data
 
-        Base64OutputStream base64OutputStream = new Base64OutputStream(outputStream, doEncode);
+        // Decodes rather then encodes the ouput data
+        Base64OutputStream base64OutputStream = new Base64OutputStream(outputStream, false);
 
         AsicHandler asicHandler = new AsicHandler(new OutputStreamWriter(base64OutputStream));
 

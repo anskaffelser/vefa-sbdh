@@ -23,7 +23,7 @@ public class SbdWrapper {
     private final Marshaller marshaller;
 
     public SbdWrapper() {
-        JAXBContext jc = null;
+        JAXBContext jc;
         try {
             jc = JAXBContext.newInstance(StandardBusinessDocumentHeader.class);
             marshaller = jc.createMarshaller();

@@ -57,7 +57,7 @@ class SbdhFastParser implements SbdhParser {
      */
     public StandardBusinessDocumentHeader parse(InputStream inputStream) {
 
-        StandardBusinessDocumentHeader standardBusinessDocumentHeader = null;
+        StandardBusinessDocumentHeader standardBusinessDocumentHeader;
 
         if (inputStream.markSupported()) {
             // Indicates number of bytes to be read before the mark position is invalidated
@@ -123,8 +123,8 @@ class SbdhFastParser implements SbdhParser {
     /**
      * Transforms the W3C DOM object into a pretty printed string.
      *
-     * @param document
-     * @return
+     * @param document W3C document to be pretty printed.
+     * @return pretty printed document
      */
     private String prettyPrint(Document document) {
         try {
@@ -133,10 +133,7 @@ class SbdhFastParser implements SbdhParser {
             StreamResult result = new StreamResult(new StringWriter());
             DOMSource source = new DOMSource(document);
             transformer.transform(source, result);
-            String s = result.getWriter().toString();
-            return s;
-        } catch (TransformerConfigurationException e) {
-            throw new IllegalStateException(e);
+            return result.getWriter().toString();
         } catch (TransformerException e) {
             throw new IllegalStateException(e);
         }

@@ -1,6 +1,5 @@
 package no.difi.vefa.sbdh;
 
-import com.javafx.tools.doclets.internal.toolkit.util.DocFinder;
 import org.testng.annotations.DataProvider;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
@@ -28,7 +27,7 @@ public class SampleDataProvider {
         InputStream sbdhAsStream = SampleDataProvider.class.getClassLoader().getResourceAsStream("sample-sbdh.xml");
         assertNotNull(resourceAsStream, "Unable to locate sample-sbdh.xml in class path");
 
-        SbdhParser sbdhParser = SbdhParserFactory.sbdhParserWithExtractor();
+        SbdhParser sbdhParser = SbdhParserFactory.sbdhParserAndExtractor();
 
         StandardBusinessDocumentHeader sbdh = sbdhParser.parse(sbdhAsStream);
 
