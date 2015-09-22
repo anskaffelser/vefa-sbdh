@@ -21,7 +21,7 @@ public class AsicExtractorTest {
 
     /** Illustrates how to extract base64 encoded ASiC archive */
     @Test(dataProvider = "sampleSbd", dataProviderClass = SampleDataProvider.class)
-    public void extractAsicArchiveFromPayload(InputStream inputStream) throws Exception {
+    public void extractAsicArchiveFromPayload(InputStream sbdXmlInputStream) throws Exception {
 
         // Creates the extractor
         AsicExtractor asicExtractor = AsicExtractorFactory.defaultAsicExtractor();
@@ -32,9 +32,9 @@ public class AsicExtractorTest {
         BufferedOutputStream outputStream = new BufferedOutputStream(fileOutputStream);
 
         // Performs the actual extraction
-        asicExtractor.extractAsic(inputStream, outputStream);
+        asicExtractor.extractAsic(sbdXmlInputStream, outputStream);
 
-        inputStream.close();
+        sbdXmlInputStream.close();
         outputStream.close();
     }
 
@@ -72,5 +72,6 @@ public class AsicExtractorTest {
         }
 
         assertTrue(asicManifestSeen);
+
     }
 }
