@@ -13,7 +13,7 @@ import java.io.*;
 
 /**
  * Wraps supplied InputStream in Base64 encoding, inside a <code>StandardBusinessDocument</code>.
- * <p/>
+ * 
  * Created by soc on 16.09.2015.
  */
 public class SbdWrapper {
