@@ -11,7 +11,7 @@ for the details of the SBD and SBDH.
 
 Note: The term "SBDH" is often used as a synonym for "SBDH", which is kind of confusing.
 
-## ASiC as base64 encoded payload withing StandardBusinessDocument
+## ASiC as base64 encoded payload within StandardBusinessDocument
 ```xml
 <?xml version="1.0"?>
 <StandardBusinessDocument>
