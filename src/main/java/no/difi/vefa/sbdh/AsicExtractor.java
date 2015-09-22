@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * Extracts base64 encoded ASiC payload from &lt;StandardBusinessDocument&gt;
+ *
  * @author steinar
  *         Date: 22.09.15
  *         Time: 08.26

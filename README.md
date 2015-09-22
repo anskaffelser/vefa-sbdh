@@ -11,6 +11,57 @@ for the details of the SBD and SBDH.
 
 Note: The term "SBDH" is often used as a synonym for "SBDH", which is kind of confusing.
 
+## ASiC as base64 encoded payload withing StandardBusinessDocument
+```xml
+<?xml version="1.0"?>
+<StandardBusinessDocument>
+<StandardBusinessDocumentHeader xmlns="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader">
+    <HeaderVersion>1.0</HeaderVersion>
+    <Sender>
+        <Identifier Authority="iso6523-actorid-upis">9908:810018902</Identifier>
+    </Sender>
+    <Receiver>
+        <Identifier Authority="iso6523-actorid-upis">9908:810418052</Identifier>
+    </Receiver>
+    <DocumentIdentification>
+        <Standard>urn:oasis:names:specification:ubl:schema:xsd:Tender-2</Standard>
+        <TypeVersion>2.1</TypeVersion>
+        <InstanceIdentifier>FA4A6819-6149-4134-95C3-C53A65338EB6</InstanceIdentifier>
+        <Type>Tender</Type>
+        <CreationDateAndTime>2015-07-26T20:08:00+01:00</CreationDateAndTime>
+    </DocumentIdentification>
+    <Manifest>
+        <NumberOfItems>1</NumberOfItems>
+        <ManifestItem>
+            <MimeTypeQualifierCode>application/vnd.etsi.asic-e+zip</MimeTypeQualifierCode>
+            <UniformResourceIdentifier>#asic</UniformResourceIdentifier>
+            <Description>ASiC archive containing the business documents.</Description>
+        </ManifestItem>
+    </Manifest>
+    <BusinessScope>
+        <Scope>
+            <Type>PROCESSID</Type>
+            <InstanceIdentifier>urn:www.cenbii.eu:profile:bii46:ver3.0</InstanceIdentifier>
+        </Scope>
+        <Scope>
+            <Type>DOCUMENTID</Type>
+            <InstanceIdentifier>
+                urn:oasis:names:specification:ubl:schema:xsd:Tender-2::Tender##urn:www.cenbii.eu:transaction:biitrdm090:ver3.0::2.1
+            </InstanceIdentifier>
+        </Scope>
+    </BusinessScope>
+</StandardBusinessDocumentHeader>
+<asic:asic xmlns:asic="urn:etsi.org:specification:02918:v1.2.1" id="asic">
+UEsDBAoAAAgAAI1ZMEeKIflFHwAAAB8AAAAIAAAAbWltZXR5cGVhcHBsaWNhdGlvbi92bmQuZXRz
+aS5hc2ljLWUremlwUEsDBBQACAgIAI1ZMEcAAAAAAAAAAAAAAAAIAAAAc2JkaC54bWytVk1z2kgQ
+   .... loads of data removed for readability ......
+bWxQSwUGAAAAAAcABwAUAgAAbBYAACgAbWltZXR5cGU9YXBwbGljYXRpb24vdm5kLmV0c2kuYXNp
+Yy1lK3pp
+</asic:asic>
+</StandardBusinessDocument>
+   
+```
+
 ## Wrapping ASiC archive as base64 encoded payload within StandardBusinessDocument
 
 In order to transport an ASiC archive as payload within a StandardBusinessDocument (SBD), the payload must 
