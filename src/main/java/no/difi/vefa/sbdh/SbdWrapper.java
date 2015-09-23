@@ -1,8 +1,6 @@
 package no.difi.vefa.sbdh;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Base64OutputStream;
-import org.apache.commons.io.IOUtils;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.ObjectFactory;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
@@ -10,11 +8,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 /**
- * Wraps supplied InputStream in Base64 encoding, inside a <code>StandardBusinessDocument</code>.
+ * Wraps supplied ASiC archive InputStream in Base64 encoding, inside a <code>StandardBusinessDocument</code>.
+ * The payload is wrapped in an &lt;asic:asic&gt; element.
  * 
  * Created by soc on 16.09.2015.
  */
@@ -70,9 +71,10 @@ public class SbdWrapper {
 
     /**
      * There is a bug in Base64OutputStream forcing us to hand write this stuff.
+     * Basically the <code>flush()</code> method on <code>Base64OutputStream</code> is broken.
      *
-     * @param inputStream
-     * @param outputStream
+     * @param inputStream holding the binary contents of the ASiC archive
+     * @param outputStream into which the base64 encode data will be written.
      */
     void emitBase64EncodedData(InputStream inputStream, OutputStream outputStream) {
         try {
@@ -93,6 +95,7 @@ public class SbdWrapper {
                     outputStream.write(bytes);
 
                 } else {
+                    // Default behavious for all blocks except the last one.
                     byte[] bytes = b64.encodeBase64(inputbuffer, false); // No padding thank you
                     outputStream.write(bytes);
                     outputStream.write("\r\n".getBytes());
@@ -104,12 +107,12 @@ public class SbdWrapper {
         }
     }
 
-    private void emitStartAsic(OutputStream out) throws IOException {
+     void emitStartAsic(OutputStream out) throws IOException {
         out.write("\n<asic:asic xmlns:asic=\"urn:etsi.org:specification:02918:v1.2.1\" id=\"asic\">\n".getBytes());
         out.flush();
     }
 
-    private void emitSbdh(StandardBusinessDocumentHeader sbdh, OutputStream out) {
+     void emitSbdh(StandardBusinessDocumentHeader sbdh, OutputStream out) {
         try {
             JAXBElement<StandardBusinessDocumentHeader> standardBusinessDocumentHeader = objectFactory.createStandardBusinessDocumentHeader(sbdh);
             marshaller.marshal(standardBusinessDocumentHeader, out);
@@ -118,7 +121,7 @@ public class SbdWrapper {
         }
     }
 
-    private void emitStart(OutputStream out) throws IOException {
+    void emitStart(OutputStream out) throws IOException {
         out.write("<?xml version=\"1.0\"?>\n <StandardBusinessDocument>\n".getBytes());
     }
 }

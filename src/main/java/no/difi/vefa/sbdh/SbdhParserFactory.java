@@ -1,6 +1,8 @@
 package no.difi.vefa.sbdh;
 
 /**
+ * Factory for SbdhParser instances.
+ *
  * Created by soc on 16.09.2015.
  */
 public class SbdhParserFactory {
