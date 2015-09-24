@@ -12,6 +12,10 @@ import java.io.OutputStream;
  */
 public interface AsicExtractor {
 
+    boolean isDecodeFromBase64();
+
+    void setDecodeFromBase64(boolean decodeFromBase64);
+
     /**
      * Extracts the Base64 encoded payload from a &lt;StandardBusinessDocument&gt;, decoded it into the supplied outputstream.
      * The payload must be represented as follows:
@@ -27,4 +31,6 @@ public interface AsicExtractor {
      * @param outputStream output stream into which the decoded (binary) contents will be written to.
      */
     void extractAsic(InputStream sbdInputStream, OutputStream outputStream);
+
+
 }

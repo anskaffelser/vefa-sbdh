@@ -26,7 +26,7 @@ public class SbdWrapperTest {
     public static final Logger log = LoggerFactory.getLogger(SbdWrapperTest.class);
 
     /**
-     * Experimental code to verify some assumptions
+     * Experimental code to verify some assumptions, i.e. does not use the SbdWrapper
      *
      * @param asicInputStream
      * @param sbdh
@@ -75,6 +75,11 @@ public class SbdWrapperTest {
     }
 
 
+    /**
+     * Encodes the ASiC archive to base64 and decodes back to binary again.
+     *
+     * @throws Exception
+     */
     @Test
     public void encodeAndDecode() throws Exception {
         URL sampleAsicUrl = SbdWrapperTest.class.getClassLoader().getResource(SampleDataProvider.SAMPLE_ASIC);
@@ -101,6 +106,7 @@ public class SbdWrapperTest {
         IOUtils.copy(base64InputStream, outputStreamForAsicCopy);
         outputStreamForAsicCopy.close();
 
+        // They should be identical
         assertEquals(asicFile.length(), asicFileCopy.length());
 
         log.debug("Wrote base64 encoded contents to " + base64Copy);
@@ -110,20 +116,39 @@ public class SbdWrapperTest {
     /**
      * Performs the actual testing using the SbdWrapper class
      *
-     * @param inputStream
+     * @param asicInputStream
      * @param standardBusinessDocumentHeader
      * @throws Exception
      */
     @Test(dataProvider = "sampleData", dataProviderClass = SampleDataProvider.class)
-    public void wrapSampleData(InputStream inputStream, StandardBusinessDocumentHeader standardBusinessDocumentHeader) throws Exception {
+    public void wrapSampleData(InputStream asicInputStream, StandardBusinessDocumentHeader standardBusinessDocumentHeader) throws Exception {
         SbdWrapper sbdWrapper = new SbdWrapper();
 
         File outputFile = File.createTempFile("vefa-sbdh", ".xml");
         FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
-        sbdWrapper.wrapInputStream(standardBusinessDocumentHeader, inputStream, fileOutputStream);
+        sbdWrapper.wrapInputStream(standardBusinessDocumentHeader, asicInputStream, fileOutputStream);
         fileOutputStream.close();
         log.debug("Wrote sample StandardBusinessDocument into " + outputFile.toString());
+
+        // Extracts the data to verify
+        File binaryFile = File.createTempFile("vefa-recreated", ".asice");
+        OutputStream out = new FileOutputStream(binaryFile);
+
+        // Extracts the base64 encoded ASiC payload
+        AsicExtractor asicExtractor = AsicExtractorFactory.defaultAsicExtractor();
+        asicExtractor.extractAsic(new FileInputStream(outputFile), out);
+        out.close();
+
+        log.debug("Re-created the ASiC file into " + binaryFile);
+
+
+        URL originalAsicFileUrl = SbdWrapperTest.class.getClassLoader().getResource(SampleDataProvider.SAMPLE_ASIC);
+        assertNotNull(originalAsicFileUrl);
+
+        File originalAsicFile = new File(originalAsicFileUrl.toURI());
+        assertEquals(originalAsicFile.length(), binaryFile.length()," The wrapped-and-unwrapped ASiC file does not equal in size to the original" );
+
     }
 
 

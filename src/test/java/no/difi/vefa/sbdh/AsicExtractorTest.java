@@ -38,6 +38,29 @@ public class AsicExtractorTest {
         outputStream.close();
     }
 
+    /** Illustrates how to extract base64 encoded ASiC archive */
+    @Test(dataProvider = "sampleSbd", dataProviderClass = SampleDataProvider.class)
+    public void extractPayloadWithoutDecodingFromPayload(InputStream sbdXmlInputStream) throws Exception {
+
+        // Creates the extractor
+        AsicExtractor asicExtractor = AsicExtractorFactory.defaultAsicExtractor();
+        // Only extract, do not decode, which is the default
+        asicExtractor.setDecodeFromBase64(false);
+
+        // Creates a temporary file to hold the results
+        File extractedSbdFile = File.createTempFile("vefa-sample-sbd", ".xml");
+        FileOutputStream fileOutputStream = new FileOutputStream(extractedSbdFile);
+        BufferedOutputStream outputStream = new BufferedOutputStream(fileOutputStream);
+
+        // Performs the actual extraction
+        asicExtractor.extractAsic(sbdXmlInputStream, outputStream);
+
+        sbdXmlInputStream.close();
+        outputStream.close();
+
+        log.debug("Extracted, non-decoded contents in " + extractedSbdFile);
+    }
+
 
     @Test(dataProvider = "sampleSbd", dataProviderClass = SampleDataProvider.class)
     public void extractSampleAsic(InputStream sbdInputStream) throws Exception {
