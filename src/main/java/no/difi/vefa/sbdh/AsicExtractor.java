@@ -4,11 +4,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * Extracts base64 encoded ASiC payload from &lt;StandardBusinessDocument&gt;
+ *
  * @author steinar
  *         Date: 22.09.15
  *         Time: 08.26
  */
 public interface AsicExtractor {
+
+    boolean isDecodeFromBase64();
+
+    void setDecodeFromBase64(boolean decodeFromBase64);
 
     /**
      * Extracts the Base64 encoded payload from a &lt;StandardBusinessDocument&gt;, decoded it into the supplied outputstream.
@@ -25,4 +31,6 @@ public interface AsicExtractor {
      * @param outputStream output stream into which the decoded (binary) contents will be written to.
      */
     void extractAsic(InputStream sbdInputStream, OutputStream outputStream);
+
+
 }

@@ -33,6 +33,9 @@ import java.io.InputStream;
  * Attempts to parse an XML file, searching for a given element, which is converted into a DOM object, which
  * is suitable for XPath application.
  *
+ * Very usefull when you have a large XML document, but only want to parse a certain part of it like for instance
+ * only the SBDH element in a StandardBusinessDocument.
+ *
  * <em>Beware: instances of this class is not thread safe</em>
  *
  * @author steinar
@@ -42,7 +45,7 @@ import java.io.InputStream;
  * @author Forent Georges
  * @see <a href="http://fgeorges.blogspot.no/2006/08/translate-sax-events-to-dom-tree.html">Translate SAX events to a DOM tree</a>
  */
-public class XML2DOMReader extends DefaultHandler {
+class XML2DOMReader extends DefaultHandler {
 
     public static final Logger log = LoggerFactory.getLogger(XML2DOMReader.class);
 
