@@ -9,7 +9,7 @@ Use this component to:
 See [UN/CEFACT SBDH Technical Specification](http://www.gs1.org/docs/gs1_un-cefact_%20xml_%20profiles/CEFACT_SBDH_TS_version1.3.pdf)
 for the details of the SBD and SBDH.
 
-Note: The term "SBDH" is often used as a synonym for "SBDH", which is kind of confusing.
+Note: The term "SBDH" is often used as a synonym for "SBD", which is kind of confusing.
 
 ## ASiC as base64 encoded payload within StandardBusinessDocument
 ```xml
