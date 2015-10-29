@@ -105,7 +105,7 @@ class SaxAsicExtractor implements AsicExtractor {
             }
 
             // Found the <asic:asic> element, start handling the characters
-            if (localName.equals("asic")) {
+            if (localName.equalsIgnoreCase("asic")) {
                 currentElementIsAsicPayload = true;
             }
         }
@@ -131,7 +131,7 @@ class SaxAsicExtractor implements AsicExtractor {
 
         @Override
         public void endElement(String uri, String localName, String qname) {
-            if (localName.equals("asic")) {
+            if (localName.equalsIgnoreCase("asic")) {
                 currentElementIsAsicPayload = false;
                 // We are done, never mind terminating the parsing, only two more elements left
             }
