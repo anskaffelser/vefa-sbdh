@@ -13,7 +13,6 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 /**
  * Extracts the ASiC base64 encoded payload from within a &lt;StandardBusinessDocument&gt; using SAX parser

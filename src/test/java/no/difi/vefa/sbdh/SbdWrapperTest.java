@@ -1,8 +1,8 @@
 package no.difi.vefa.sbdh;
 
+import com.google.common.io.ByteStreams;
 import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.codec.binary.Base64OutputStream;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -61,7 +61,7 @@ public class SbdWrapperTest {
         // Base64 contents goes here:
         Base64OutputStream base64OutputStream = new Base64OutputStream(outputStream);
 
-        IOUtils.copy(asicInputStream, base64OutputStream);
+        ByteStreams.copy(asicInputStream, base64OutputStream);
         base64OutputStream.flush();
 
         // Wrap up
@@ -94,7 +94,7 @@ public class SbdWrapperTest {
 
         // Converts from binary -> base64
 
-        IOUtils.copy(new FileInputStream(asicFile), base64OutputStream);
+        ByteStreams.copy(new FileInputStream(asicFile), base64OutputStream);
         base64OutputStream.close();
         assertTrue(base64Copy.length() > asicFile.length(), "Base encoding failed");
 
@@ -103,7 +103,7 @@ public class SbdWrapperTest {
         File asicFileCopy = File.createTempFile("asic-copy", ".asice");
         Base64InputStream base64InputStream = new Base64InputStream(new FileInputStream(base64Copy));
         FileOutputStream outputStreamForAsicCopy = new FileOutputStream(asicFileCopy);
-        IOUtils.copy(base64InputStream, outputStreamForAsicCopy);
+        ByteStreams.copy(base64InputStream, outputStreamForAsicCopy);
         outputStreamForAsicCopy.close();
 
         // They should be identical
