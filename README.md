@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/difi/vefa-sbdh.svg?branch=master)](https://travis-ci.org/difi/vefa-sbdh)
+
 # vefa-sbdh - manipulates StandardBusinessDocument and StandardBusinessDocumentHeader 
 
 Use this component to:
