@@ -19,6 +19,7 @@ public class SampleDataProvider {
 
     public static final String SAMPLE_ASIC = "sample-asic.asice";
     public static final String SAMPLE_SBD_XML = "sample-sbd.xml";
+    public static final String SAMPLE_SBD_XML_WITH_NS = "sample-sbd-ns.xml";
 
     @DataProvider(name = "sampleData")
     public static Object[][] creatAsicArchive() {
@@ -27,14 +28,19 @@ public class SampleDataProvider {
         InputStream asicInputStream = SampleDataProvider.class.getClassLoader().getResourceAsStream(SAMPLE_ASIC);
         assertNotNull(asicInputStream, "Unable to locate " + SAMPLE_ASIC + " in class path");
 
-        InputStream sbdhAsStream = SampleDataProvider.class.getClassLoader().getResourceAsStream("sample-sbdh.xml");
-        assertNotNull(asicInputStream, "Unable to locate sample-sbdh.xml in class path");
+        InputStream sbdhAsStream = SampleDataProvider.class.getClassLoader().getResourceAsStream("sample-sbdh-ns.xml");
+        assertNotNull(sbdhAsStream, "Unable to locate sample-sbdh.xml in class path");
+        
+        InputStream sbdhWithNSAsStream = SampleDataProvider.class.getClassLoader().getResourceAsStream("sample-sbdh-ns.xml");
+        assertNotNull(sbdhWithNSAsStream, "Unable to locate sample-sbdh-ns.xml in class path");
 
         SbdhParser sbdhParser = SbdhParserFactory.sbdhParserAndExtractor();
 
         StandardBusinessDocumentHeader sbdh = sbdhParser.parse(sbdhAsStream);
 
-        return new Object[][]{{asicInputStream, sbdh}};
+        StandardBusinessDocumentHeader sbdhWithNS = sbdhParser.parse(sbdhWithNSAsStream);
+
+        return new Object[][]{{asicInputStream, sbdh, sbdhWithNS}};
     }
 
     @DataProvider(name = "sampleSbd")
@@ -44,6 +50,15 @@ public class SampleDataProvider {
 
 
         return new Object[][]{ { sbdStream } };
+    }
+    
+    @DataProvider(name = "sampleSbdWithNS")
+    public static Object[][] sampleSbdWithNS() {
+        InputStream sbdStream2 = SampleDataProvider.class.getClassLoader().getResourceAsStream(SAMPLE_SBD_XML_WITH_NS);
+        assertNotNull(sbdStream2, "Unable to locate " + SAMPLE_SBD_XML_WITH_NS + " in class path");
+
+
+        return new Object[][]{ { sbdStream2 } };
     }
 
     @DataProvider(name="sampleAsicFile")
