@@ -26,4 +26,17 @@ public class SbdhParserTest {
         // Ensures that we got something
         assertNotNull(standardBusinessDocumentHeader);
     }
+    
+    @Test(dataProvider = "sampleSbdWithNS", dataProviderClass = SampleDataProvider.class)
+    public void parseSampleSbdhFromLargeStandardBusinessDocumentWithNS(InputStream sbdInputStream) throws Exception {
+
+        // Creates a parser, which will extract the SBDH from a really large xml file
+        SbdhParser sbdhParser = SbdhParserFactory.sbdhParserAndExtractor();
+
+        // Performs the actual parsing
+        StandardBusinessDocumentHeader standardBusinessDocumentHeader = sbdhParser.parse(sbdInputStream);
+
+        // Ensures that we got something
+        assertNotNull(standardBusinessDocumentHeader);
+    }
 }
