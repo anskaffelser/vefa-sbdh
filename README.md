@@ -1,6 +1,9 @@
-[![Build Status](https://travis-ci.org/difi/vefa-sbdh.svg?branch=master)](https://travis-ci.org/difi/vefa-sbdh)
+# VEFA SBDH - manipulates StandardBusinessDocument and StandardBusinessDocumentHeader 
 
-# vefa-sbdh - manipulates StandardBusinessDocument and StandardBusinessDocumentHeader 
+[![Build Status](https://travis-ci.org/difi/vefa-sbdh.svg?branch=master)](https://travis-ci.org/difi/vefa-sbdh)
+[![Codecov](https://codecov.io/gh/difi/vefa-sbdh/branch/master/graph/badge.svg)](https://codecov.io/gh/difi/vefa-sbdh)
+[![Maven Central](https://img.shields.io/maven-central/v/no.difi.vefa/sbdh.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22no.difi.vefa%22%20AND%20sbdh)
+
 
 Use this component to:
 
