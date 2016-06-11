@@ -2,16 +2,16 @@
 
 package no.difi.vefa.sbdh;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 import org.w3c.dom.Document;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
@@ -30,20 +30,7 @@ import java.io.StringWriter;
  *         Date: 24.06.15
  *         Time: 15.58
  */
-class SbdhFastParser implements SbdhParser {
-
-    private static final Logger log = LoggerFactory.getLogger(SbdhFastParser.class);
-    private JAXBContext jaxbContext;
-
-    public SbdhFastParser() {
-        // Do this only once, as it is pretty heavy
-        try {
-            // supplying the Class loader should hopefully make this work in a JEE environment
-            jaxbContext = JAXBContext.newInstance("org.unece.cefact.namespaces.standardbusinessdocumentheader", org.unece.cefact.namespaces.standardbusinessdocumentheader.ObjectFactory.class.getClassLoader());
-        } catch (JAXBException e) {
-            throw new IllegalStateException(e);
-        }
-    }
+class SbdhFastParser extends SbdhContext implements SbdhParser {
 
     /**
      * Parses the inputstream from first occurence of &lt;StandardBusinessDocumentHeader&gt; to

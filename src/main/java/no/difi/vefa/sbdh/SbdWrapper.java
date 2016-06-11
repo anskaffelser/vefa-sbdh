@@ -1,10 +1,8 @@
 package no.difi.vefa.sbdh;
 
 import org.apache.commons.codec.binary.Base64;
-import org.unece.cefact.namespaces.standardbusinessdocumentheader.ObjectFactory;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -19,28 +17,9 @@ import java.util.Arrays;
  * 
  * Created by soc on 16.09.2015.
  */
-public class SbdWrapper {
-
-
-    private ObjectFactory objectFactory;
-    private final Marshaller marshaller;
-
-    public SbdWrapper() {
-        JAXBContext jc;
-        try {
-            jc = JAXBContext.newInstance(StandardBusinessDocumentHeader.class);
-            marshaller = jc.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true); // Prevents output of XML preamble
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        } catch (JAXBException e) {
-            throw new IllegalStateException("Internal error: " + e.getMessage(), e);
-        }
-        objectFactory = new ObjectFactory();
-
-    }
+public class SbdWrapper extends SbdhContext {
 
     public void wrapInputStream(StandardBusinessDocumentHeader sbdh, InputStream inputStream, OutputStream outputStream) {
-
 
         // Emits the <StandardBusinessDocument> element
         try {
@@ -115,6 +94,10 @@ public class SbdWrapper {
      void emitSbdh(StandardBusinessDocumentHeader sbdh, OutputStream out) {
         try {
             JAXBElement<StandardBusinessDocumentHeader> standardBusinessDocumentHeader = objectFactory.createStandardBusinessDocumentHeader(sbdh);
+
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true); // Prevents output of XML preamble
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(standardBusinessDocumentHeader, out);
         } catch (JAXBException e) {
             throw new IllegalStateException("Unable to convert SBDH into plain XML:" + e.getMessage(), e);

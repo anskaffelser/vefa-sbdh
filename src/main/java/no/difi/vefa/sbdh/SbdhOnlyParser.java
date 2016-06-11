@@ -1,9 +1,7 @@
 package no.difi.vefa.sbdh;
 
-import org.unece.cefact.namespaces.standardbusinessdocumentheader.ObjectFactory;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -18,18 +16,7 @@ import java.io.InputStream;
  *
  * Created by soc on 16.09.2015.
  */
- class SbdhOnlyParser implements SbdhParser {
-
-    private final JAXBContext jaxbContext;
-
-    public SbdhOnlyParser() {
-        try {
-            // Saves us grief when moving from Java SE to EE environment.
-            jaxbContext = JAXBContext.newInstance("org.unece.cefact.namespaces.standardbusinessdocumentheader", ObjectFactory.class.getClassLoader());
-        } catch (JAXBException e) {
-            throw new IllegalStateException("Unable to create JAXBContext " + e.getMessage(), e);
-        }
-    }
+ class SbdhOnlyParser extends SbdhContext implements SbdhParser {
 
     /**
      * Parses the <code>&lt;StandardBusinessDocumentHeader&gt;</code> XML fragment

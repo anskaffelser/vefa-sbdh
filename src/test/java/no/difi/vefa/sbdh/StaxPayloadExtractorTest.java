@@ -1,8 +1,6 @@
 package no.difi.vefa.sbdh;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -15,12 +13,10 @@ import java.io.ByteArrayOutputStream;
 
 public class StaxPayloadExtractorTest {
 
-    private Logger logger = LoggerFactory.getLogger(StaxPayloadExtractorTest.class);
-
     @Test
     public void simple() throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        new StaxPayloadExtractor().extract(getClass().getResourceAsStream("/peppol-bis-invoice-sbdh.xml"), byteArrayOutputStream);
+        StaxPayloadExtractor.extract(getClass().getResourceAsStream("/peppol-bis-invoice-sbdh.xml"), byteArrayOutputStream);
 
         JAXBContext jaxbContext = JAXBContext.newInstance(InvoiceType.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();

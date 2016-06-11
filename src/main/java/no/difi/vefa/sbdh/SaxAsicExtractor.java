@@ -1,8 +1,6 @@
 package no.difi.vefa.sbdh;
 
 import org.apache.commons.codec.binary.Base64OutputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -24,8 +22,6 @@ import java.io.OutputStream;
  */
 class SaxAsicExtractor implements AsicExtractor {
 
-
-    public static final Logger log = LoggerFactory.getLogger(SaxAsicExtractor.class);
 
     /**
      * Whether the data should be extracted and decoded. If set to false, only extraction will

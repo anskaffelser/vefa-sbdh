@@ -14,7 +14,7 @@ public class StaxPayloadExtractor {
     private static XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
     private static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
 
-    public void extract(InputStream inputStream, OutputStream outputStream) {
+    public static void extract(InputStream inputStream, OutputStream outputStream) {
         try {
             XMLStreamReader source = xmlInputFactory.createXMLStreamReader(inputStream);
             XMLStreamWriter target = xmlOutputFactory.createXMLStreamWriter(outputStream, source.getEncoding());
