@@ -99,7 +99,6 @@ public class Header implements Serializable {
         if (instanceIdentifier != null ? !instanceIdentifier.equals(header.instanceIdentifier) : header.instanceIdentifier != null)
             return false;
         return !(creationTimestamp != null ? !creationTimestamp.equals(header.creationTimestamp) : header.creationTimestamp != null);
-
     }
 
     @Override
