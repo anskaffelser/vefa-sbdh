@@ -14,6 +14,7 @@ public class StaxCharacterWriter extends Writer {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void write(char[] cbuf, int off, int len) throws IOException {
         try {
             writer.writeCharacters(cbuf, off, len);
@@ -33,6 +34,6 @@ public class StaxCharacterWriter extends Writer {
 
     @Override
     public void close() throws IOException {
-        // No action
+        flush();
     }
 }

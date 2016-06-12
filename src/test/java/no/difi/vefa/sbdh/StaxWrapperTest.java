@@ -18,16 +18,10 @@ public class StaxWrapperTest {
                 getClass().getResourceAsStream("/sample-asic.asice"),
                 System.out
         );
+    }
 
-        /*
-        new SbdWrapper().wrapInputStream(HeaderHelper.toSbdh(Header.newInstance()
-                        .setSenderIdentifier(new ParticipantIdentifier("9908:987654321"))
-                        .setReceiverIdentifier(new ParticipantIdentifier("9908:123456789"))
-                        .setProcessIdentifier(new ProcessIdentifier("urn:www.cenbii.eu:profile:bii04:ver1.0"))
-                        .setDocumentTypeIdentifier(new DocumentTypeIdentifier("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0::2.0"))),
-                getClass().getResourceAsStream("/sample-asic.asice"),
-                System.out
-        );
-        */
+    @Test
+    public void simpleConstructor() {
+        new StaxWrapper();
     }
 }

@@ -4,6 +4,8 @@ import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import no.difi.vefa.sbdh.lang.SbdhException;
 import no.difi.vefa.sbdh.util.StaxCharacterWriter;
+import org.unece.cefact.namespaces.standardbusinessdocumentheader.Manifest;
+import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
 import javax.xml.bind.JAXBException;
@@ -14,13 +16,14 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 
 public class StaxWrapper extends SbdhContext {
 
     protected static final String NS_SBDH = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";
     protected static final String NS_ASIC = "urn:etsi.org:specification:02918:v1.2.1";
 
-    protected static BaseEncoding encoding = BaseEncoding.base64();
+    protected static BaseEncoding encoding = BaseEncoding.base64().withSeparator("\n", 75);
 
     // protected static XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
     protected static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
@@ -37,6 +40,16 @@ public class StaxWrapper extends SbdhContext {
             target.writeStartDocument("UTF-8", "1.0");
             target.writeStartElement("", "StandardBusinessDocument", NS_SBDH);
             target.writeNamespace("", NS_SBDH);
+
+            // Add manifest
+            sbdh.setManifest(new Manifest() {{
+                setNumberOfItems(BigInteger.valueOf(1));
+                getManifestItem().add(new ManifestItem() {{
+                    setMimeTypeQualifierCode("application/vnd.etsi.asic-e+zip");
+                    setUniformResourceIdentifier("#asic");
+                    setDescription("ASiC archive containing the business documents.");
+                }});
+            }});
 
             // Write header
             Marshaller marshaller = jaxbContext.createMarshaller();
@@ -64,5 +77,9 @@ public class StaxWrapper extends SbdhContext {
         } catch (XMLStreamException | JAXBException | IOException e) {
             throw new SbdhException(e.getMessage(), e);
         }
+    }
+
+    StaxWrapper() {
+        // No action.
     }
 }
