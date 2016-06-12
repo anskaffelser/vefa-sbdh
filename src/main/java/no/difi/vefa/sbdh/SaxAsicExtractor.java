@@ -1,5 +1,6 @@
 package no.difi.vefa.sbdh;
 
+import no.difi.vefa.sbdh.api.AsicExtractor;
 import org.apache.commons.codec.binary.Base64OutputStream;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

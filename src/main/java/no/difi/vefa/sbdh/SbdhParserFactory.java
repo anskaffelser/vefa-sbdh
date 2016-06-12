@@ -1,5 +1,7 @@
 package no.difi.vefa.sbdh;
 
+import no.difi.vefa.sbdh.api.SbdhParser;
+
 /**
  * Factory for SbdhParser instances.
  *

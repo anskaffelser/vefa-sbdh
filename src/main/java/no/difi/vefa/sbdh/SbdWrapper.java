@@ -1,6 +1,7 @@
 package no.difi.vefa.sbdh;
 
 import no.difi.vefa.sbdh.lang.SbdhException;
+import no.difi.vefa.sbdh.util.AsicAsXmlInputStream;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
 import java.io.InputStream;
@@ -17,7 +18,7 @@ public class SbdWrapper extends SbdhContext {
 
     public void wrapInputStream(StandardBusinessDocumentHeader sbdh, InputStream inputStream, OutputStream outputStream) {
         try {
-            StaxWrapper.wrap(sbdh, inputStream, outputStream);
+            StaxWrapper.wrap(sbdh, new AsicAsXmlInputStream(inputStream), outputStream);
         } catch (SbdhException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }

@@ -1,5 +1,7 @@
 package no.difi.vefa.sbdh;
 
+import no.difi.vefa.sbdh.api.AsicExtractor;
+
 /**
  * AsicExtractor factory using the factory design pattern in order to make code a little more future proof.
  *

@@ -1,5 +1,6 @@
 package no.difi.vefa.sbdh;
 
+import no.difi.vefa.sbdh.api.SbdhParser;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
 import javax.xml.bind.JAXBElement;
@@ -34,7 +35,7 @@ import java.io.InputStream;
             throw new IllegalStateException("Unable to create JAXB unmarshaller " + e1.getMessage(), e1);
         }
 
-        JAXBElement element = null;
+        JAXBElement element;
         try {
             element = (JAXBElement) unmarshaller.unmarshal(inputStream);
         } catch (JAXBException e) {

@@ -7,6 +7,9 @@ import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusine
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
+/**
+ * Class containing resources to be available in other classes by inheritance.
+ */
 abstract class SbdhContext {
 
     protected static final String NS_SBDH = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";

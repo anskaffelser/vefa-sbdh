@@ -1,37 +1,25 @@
 package no.difi.vefa.sbdh;
 
-import com.google.common.io.BaseEncoding;
-import com.google.common.io.ByteStreams;
+import no.difi.vefa.sbdh.api.ContentWithManifest;
 import no.difi.vefa.sbdh.lang.SbdhException;
-import no.difi.vefa.sbdh.util.StaxCharacterWriter;
-import org.unece.cefact.namespaces.standardbusinessdocumentheader.Manifest;
-import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigInteger;
 
-public class StaxWrapper extends SbdhContext {
+public class StaxWrapper extends StaxContext {
 
-    protected static final String NS_ASIC = "urn:etsi.org:specification:02918:v1.2.1";
-
-    protected static BaseEncoding encoding = BaseEncoding.base64().withSeparator("\n", 75);
-
-    // protected static XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
-    protected static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
-
-    public static void wrap(Header header, InputStream inputStream, OutputStream outputStream) throws SbdhException{
+    public static void wrap(Header header, InputStream inputStream, OutputStream outputStream) throws SbdhException {
         wrap(HeaderHelper.toSbdh(header), inputStream, outputStream);
     }
 
-    public static void wrap(StandardBusinessDocumentHeader sbdh, InputStream inputStream, OutputStream outputStream) throws SbdhException{
+    public static void wrap(StandardBusinessDocumentHeader sbdh, InputStream inputStream, OutputStream outputStream) throws SbdhException {
         try {
             XMLStreamWriter target = xmlOutputFactory.createXMLStreamWriter(outputStream, "UTF-8");
 
@@ -41,39 +29,50 @@ public class StaxWrapper extends SbdhContext {
             target.writeNamespace("", NS_SBDH);
 
             // Add manifest
-            sbdh.setManifest(new Manifest() {{
-                setNumberOfItems(BigInteger.valueOf(1));
-                getManifestItem().add(new ManifestItem() {{
-                    setMimeTypeQualifierCode("application/vnd.etsi.asic-e+zip");
-                    setUniformResourceIdentifier("#asic");
-                    setDescription("ASiC archive containing the business documents.");
-                }});
-            }});
+            if (inputStream instanceof ContentWithManifest)
+                sbdh.setManifest(((ContentWithManifest) inputStream).getManifest());
 
             // Write header
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
             marshaller.marshal(objectFactory.createStandardBusinessDocumentHeader(sbdh), target);
 
-            // Initiate ASIC
-            target.writeStartElement("asic", "asic", NS_ASIC);
-            target.writeNamespace("asic", NS_ASIC);
-            target.writeAttribute("id", "asic");
+            // Copy XML into stream.
+            XMLStreamReader source = xmlInputFactory.createXMLStreamReader(inputStream);
+            do {
+                switch (source.getEventType()) {
+                    case XMLStreamConstants.START_ELEMENT:
+                        target.writeStartElement(source.getPrefix(), source.getLocalName(), source.getNamespaceURI());
 
-            // Write ASiC as base64 content.
-            OutputStream asicStream = encoding.encodingStream(new StaxCharacterWriter(target));
-            ByteStreams.copy(inputStream, asicStream);
-            asicStream.close();
+                        for (int i = 0; i < source.getNamespaceCount(); i++)
+                            target.writeNamespace(source.getNamespacePrefix(i), source.getNamespaceURI(i));
+                        for (int i = 0; i < source.getAttributeCount(); i++)
+                            target.writeAttribute(source.getAttributeLocalName(i), source.getAttributeValue(i));
+                        break;
 
-            // Finalize ASIC
-            target.writeEndElement();
+                    case XMLStreamConstants.END_ELEMENT:
+                        target.writeEndElement();
+                        break;
+
+                    case XMLStreamConstants.CHARACTERS:
+                        target.writeCharacters(source.getText());
+                        break;
+
+                    case XMLStreamConstants.CDATA:
+                        target.writeCData(source.getText());
+                        break;
+                }
+
+                target.flush();
+            } while (source.hasNext() && source.next() > 0);
+            source.close();
 
             // Finalize SBDH
             target.writeEndElement();
             target.writeEndDocument();
 
             target.close();
-        } catch (XMLStreamException | JAXBException | IOException e) {
+        } catch (XMLStreamException | JAXBException e) {
             throw new SbdhException(e.getMessage(), e);
         }
     }

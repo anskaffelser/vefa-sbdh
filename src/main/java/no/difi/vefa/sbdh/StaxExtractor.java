@@ -4,14 +4,14 @@ import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusine
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.*;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class StaxExtractor extends SbdhContext {
-
-    private static XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
-    private static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
+public class StaxExtractor extends StaxContext {
 
     public static StandardBusinessDocumentHeader extract(InputStream inputStream, OutputStream outputStream) {
         try {
@@ -37,10 +37,10 @@ public class StaxExtractor extends SbdhContext {
                         if (payload) {
                             target.writeStartElement(source.getPrefix(), source.getLocalName(), source.getNamespaceURI());
 
-                            for (int i = 0; i < source.getAttributeCount(); i++)
-                                target.writeAttribute(source.getAttributeLocalName(i), source.getAttributeValue(i));
                             for (int i = 0; i < source.getNamespaceCount(); i++)
                                 target.writeNamespace(source.getNamespacePrefix(i), source.getNamespaceURI(i));
+                            for (int i = 0; i < source.getAttributeCount(); i++)
+                                target.writeAttribute(source.getAttributeLocalName(i), source.getAttributeValue(i));
                         } else {
                             if (source.getLocalName().equals("StandardBusinessDocumentHeader")) {
                                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();

@@ -1,5 +1,6 @@
 package no.difi.vefa.sbdh;
 
+import no.difi.vefa.sbdh.api.SbdhParser;
 import org.testng.annotations.DataProvider;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 

@@ -5,10 +5,10 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-public class InputStreamAsAsicXmlWrapperTest {
+public class AsicAsXmlInputStreamTest {
 
     @Test
     public void simple() throws IOException {
-        ByteStreams.copy(new InputStreamAsAsicXmlWrapper(getClass().getResourceAsStream("/sample-asic.asice")), System.out);
+        ByteStreams.copy(new AsicAsXmlInputStream(getClass().getResourceAsStream("/sample-asic.asice")), System.out);
     }
 }

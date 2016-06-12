@@ -1,4 +1,4 @@
-package no.difi.vefa.sbdh;
+package no.difi.vefa.sbdh.api;
 
 import java.io.InputStream;
 import java.io.OutputStream;

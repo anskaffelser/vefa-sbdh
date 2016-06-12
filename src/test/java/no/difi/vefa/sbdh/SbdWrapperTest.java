@@ -1,6 +1,7 @@
 package no.difi.vefa.sbdh;
 
 import com.google.common.io.ByteStreams;
+import no.difi.vefa.sbdh.api.AsicExtractor;
 import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.codec.binary.Base64OutputStream;
 import org.slf4j.Logger;

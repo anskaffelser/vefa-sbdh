@@ -4,7 +4,9 @@ import no.difi.vefa.peppol.common.model.DocumentTypeIdentifier;
 import no.difi.vefa.peppol.common.model.InstanceIdentifier;
 import no.difi.vefa.peppol.common.model.ParticipantIdentifier;
 import no.difi.vefa.peppol.common.model.ProcessIdentifier;
+import no.difi.vefa.sbdh.lang.SbdhException;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
@@ -12,24 +14,24 @@ import java.util.Date;
 
 public class HeaderHelperTest {
 
+    private ParticipantIdentifier sender = new ParticipantIdentifier("9908:987654321");
+    private ParticipantIdentifier receiver = new ParticipantIdentifier("9908:123456789");
+    private ProcessIdentifier processIdentifier = new ProcessIdentifier("urn:www.cenbii.eu:profile:bii04:ver1.0");
+    private DocumentTypeIdentifier documentTypeIdentifier = new DocumentTypeIdentifier("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0::2.0");
+    private InstanceIdentifier instanceIdentifier = InstanceIdentifier.generateUUID();
+    private Date creationTimestamp = new Date();
+
+    private Header header = Header.newInstance()
+            .setSenderIdentifier(sender)
+            .setReceiverIdentifier(receiver)
+            .setProcessIdentifier(processIdentifier)
+            .setDocumentTypeIdentifier(documentTypeIdentifier)
+            .setInstanceIdentifier(instanceIdentifier)
+            .setCreationTimestamp(creationTimestamp);
+
     @Test
     public void simple() throws Exception {
-        ParticipantIdentifier sender = new ParticipantIdentifier("9908:987654321");
-        ParticipantIdentifier receiver = new ParticipantIdentifier("9908:123456789");
-        ProcessIdentifier processIdentifier = new ProcessIdentifier("urn:www.cenbii.eu:profile:bii04:ver1.0");
-        DocumentTypeIdentifier documentTypeIdentifier = new DocumentTypeIdentifier("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0::2.0");
-        InstanceIdentifier instanceIdentifier = InstanceIdentifier.generateUUID();
-        Date creationTimestamp = new Date();
-
-        StandardBusinessDocumentHeader sbdh = HeaderHelper.toSbdh(Header.newInstance()
-                .setSenderIdentifier(sender)
-                .setReceiverIdentifier(receiver)
-                .setProcessIdentifier(processIdentifier)
-                .setDocumentTypeIdentifier(documentTypeIdentifier)
-                .setInstanceIdentifier(instanceIdentifier)
-                .setCreationTimestamp(creationTimestamp));
-
-        Header header = HeaderHelper.fromSbdh(sbdh);
+        Header header = HeaderHelper.fromSbdh(HeaderHelper.toSbdh(this.header));
 
         Assert.assertEquals(header.getSenderIdentifier(), sender);
         Assert.assertEquals(header.getReceiverIdentifier(), receiver);
@@ -53,5 +55,25 @@ public class HeaderHelperTest {
     @Test
     public void simpleConstructor() {
         new HeaderHelper();
+    }
+
+    @Test(expectedExceptions = SbdhException.class)
+    public void toSbdhWithoutSender() throws SbdhException {
+        HeaderHelper.toSbdh(header.setSenderIdentifier(null));
+    }
+
+    @Test(expectedExceptions = SbdhException.class)
+    public void toSbdhWithoutReceiver() throws SbdhException {
+        HeaderHelper.toSbdh(header.setReceiverIdentifier(null));
+    }
+
+    @Test(expectedExceptions = SbdhException.class)
+    public void toSbdhWithoutProcess() throws SbdhException {
+        HeaderHelper.toSbdh(header.setProcessIdentifier(null));
+    }
+
+    @Test(expectedExceptions = SbdhException.class)
+    public void toSbdhWithoutDocumentType() throws SbdhException {
+        HeaderHelper.toSbdh(header.setDocumentTypeIdentifier(null));
     }
 }
