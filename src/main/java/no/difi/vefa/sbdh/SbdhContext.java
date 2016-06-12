@@ -9,6 +9,8 @@ import javax.xml.bind.JAXBException;
 
 abstract class SbdhContext {
 
+    protected static final String NS_SBDH = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";
+
     protected static JAXBContext jaxbContext;
 
     protected static ObjectFactory objectFactory = new ObjectFactory();

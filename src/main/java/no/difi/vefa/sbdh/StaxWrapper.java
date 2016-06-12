@@ -20,7 +20,6 @@ import java.math.BigInteger;
 
 public class StaxWrapper extends SbdhContext {
 
-    protected static final String NS_SBDH = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";
     protected static final String NS_ASIC = "urn:etsi.org:specification:02918:v1.2.1";
 
     protected static BaseEncoding encoding = BaseEncoding.base64().withSeparator("\n", 75);

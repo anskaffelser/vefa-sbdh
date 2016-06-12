@@ -1,5 +1,3 @@
-
-
 package no.difi.vefa.sbdh;
 
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
@@ -48,7 +46,7 @@ class SbdhFastParser extends SbdhContext implements SbdhParser {
 
         if (inputStream.markSupported()) {
             // Indicates number of bytes to be read before the mark position is invalidated
-            inputStream.mark(1024*32); // 32K should be sufficient to read the SBDH
+            inputStream.mark(1024 * 32); // 32K should be sufficient to read the SBDH
         }
 
         // Parses and creates the W3C DOM
@@ -77,7 +75,7 @@ class SbdhFastParser extends SbdhContext implements SbdhParser {
             try {
                 inputStream.reset();
             } catch (IOException e) {
-                throw new IllegalStateException("Unable to reset intput stream" + e,e);
+                throw new IllegalStateException("Unable to reset intput stream" + e, e);
             }
         }
         return standardBusinessDocumentHeader;
