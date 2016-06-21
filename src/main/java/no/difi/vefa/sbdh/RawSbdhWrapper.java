@@ -1,7 +1,7 @@
 package no.difi.vefa.sbdh;
 
-import no.difi.vefa.sbdh.api.ContentWithManifest;
-import no.difi.vefa.sbdh.lang.SbdhException;
+import no.difi.vefa.sbdh.api.RawEnvelopeWrapper;
+import no.difi.vefa.sbdh.lang.EnvelopeException;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
 import javax.xml.bind.JAXBException;
@@ -10,33 +10,42 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class StaxWrapper extends StaxContext {
+class RawSbdhWrapper extends RawSbdhContext implements RawEnvelopeWrapper<StandardBusinessDocumentHeader> {
 
-    public static void wrap(Header header, InputStream inputStream, OutputStream outputStream) throws SbdhException {
-        wrap(HeaderHelper.toSbdh(header), inputStream, outputStream);
-    }
+    private XMLStreamWriter target;
 
-    public static void wrap(StandardBusinessDocumentHeader sbdh, InputStream inputStream, OutputStream outputStream) throws SbdhException {
+    public RawSbdhWrapper(OutputStream outputStream) throws EnvelopeException {
         try {
-            XMLStreamWriter target = xmlOutputFactory.createXMLStreamWriter(outputStream, "UTF-8");
+            this.target = xmlOutputFactory.createXMLStreamWriter(outputStream, "UTF-8");
 
             // Initiate SBDH
             target.writeStartDocument("UTF-8", "1.0");
             target.writeStartElement("", "StandardBusinessDocument", NS_SBDH);
             target.writeNamespace("", NS_SBDH);
+        } catch (XMLStreamException e) {
+            throw new EnvelopeException("Unable to initiate XMLStreamWriter.", e);
+        }
+    }
 
-            // Add manifest
-            if (inputStream instanceof ContentWithManifest)
-                sbdh.setManifest(((ContentWithManifest) inputStream).getManifest());
-
+    @Override
+    public void writeHeader(StandardBusinessDocumentHeader header) throws EnvelopeException {
+        try {
             // Write header
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-            marshaller.marshal(objectFactory.createStandardBusinessDocumentHeader(sbdh), target);
+            marshaller.marshal(objectFactory.createStandardBusinessDocumentHeader(header), target);
+        } catch (JAXBException e) {
+            throw new EnvelopeException("Unable to write header.", e);
+        }
+    }
 
+    @Override
+    public void writePayload(InputStream inputStream) throws EnvelopeException {
+        try {
             // Copy XML into stream.
             XMLStreamReader source = xmlInputFactory.createXMLStreamReader(inputStream);
             do {
@@ -67,17 +76,21 @@ public class StaxWrapper extends StaxContext {
             } while (source.hasNext() && source.next() > 0);
             source.close();
 
+        } catch (XMLStreamException e) {
+            throw new EnvelopeException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        try {
             // Finalize SBDH
             target.writeEndElement();
             target.writeEndDocument();
 
             target.close();
-        } catch (XMLStreamException | JAXBException e) {
-            throw new SbdhException(e.getMessage(), e);
+        } catch (XMLStreamException e) {
+            throw new IOException("Unable to close XMLStreamWriter.", e);
         }
-    }
-
-    StaxWrapper() {
-        // No action.
     }
 }

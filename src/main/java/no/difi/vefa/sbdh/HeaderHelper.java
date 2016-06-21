@@ -4,7 +4,7 @@ import no.difi.vefa.peppol.common.model.DocumentTypeIdentifier;
 import no.difi.vefa.peppol.common.model.InstanceIdentifier;
 import no.difi.vefa.peppol.common.model.ParticipantIdentifier;
 import no.difi.vefa.peppol.common.model.ProcessIdentifier;
-import no.difi.vefa.sbdh.lang.SbdhException;
+import no.difi.vefa.sbdh.lang.EnvelopeException;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.*;
 
 import javax.xml.bind.JAXBException;
@@ -18,17 +18,17 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class HeaderHelper extends SbdhContext {
+class HeaderHelper extends RawSbdhContext {
 
-    public static StandardBusinessDocumentHeader toSbdh(Header header) throws SbdhException {
+    public static StandardBusinessDocumentHeader toSbdh(Header header) throws EnvelopeException {
         if (header.getSenderIdentifier() == null)
-            throw new SbdhException("Sender is missing.");
+            throw new EnvelopeException("Sender is missing.");
         if (header.getReceiverIdentifier() == null)
-            throw new SbdhException("Receiver is missing.");
+            throw new EnvelopeException("Receiver is missing.");
         if (header.getProcessIdentifier() == null)
-            throw new SbdhException("Process identifier is missing.");
+            throw new EnvelopeException("Process identifier is missing.");
         if (header.getDocumentTypeIdentifier() == null)
-            throw new SbdhException("Document type identifier is missing.");
+            throw new EnvelopeException("Document type identifier is missing.");
 
         if (header.getInstanceIdentifier() == null)
             header = header.setInstanceIdentifier(InstanceIdentifier.generateUUID());
@@ -38,7 +38,7 @@ public class HeaderHelper extends SbdhContext {
         return createObject(header);
     }
 
-    private static StandardBusinessDocumentHeader createObject(final Header header) throws SbdhException {
+    private static StandardBusinessDocumentHeader createObject(final Header header) throws EnvelopeException {
         try {
             return new StandardBusinessDocumentHeader() {{
                 // Header version
@@ -87,30 +87,30 @@ public class HeaderHelper extends SbdhContext {
                 }});
             }};
         } catch (DatatypeConfigurationException e) {
-            throw new SbdhException(e.getMessage(), e);
+            throw new EnvelopeException(e.getMessage(), e);
         }
     }
 
-    public static void toSbdh(Header header, OutputStream outputStream) throws SbdhException {
+    public static void toSbdh(Header header, OutputStream outputStream) throws EnvelopeException {
         try {
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.marshal(objectFactory.createStandardBusinessDocumentHeader(toSbdh(header)), outputStream);
         } catch (JAXBException e) {
-            throw new SbdhException(e.getMessage(), e);
+            throw new EnvelopeException(e.getMessage(), e);
         }
     }
 
-    public static Header fromSbdh(StandardBusinessDocumentHeader sbdh) throws SbdhException {
+    public static Header fromSbdh(StandardBusinessDocumentHeader sbdh) throws EnvelopeException {
         Header header = Header.newInstance();
 
         // Sender
         if (sbdh.getSender().size() == 0)
-            throw new SbdhException("Sender not available.");
+            throw new EnvelopeException("Sender not available.");
         header = header.setSenderIdentifier(new ParticipantIdentifier(sbdh.getSender().get(0).getIdentifier().getValue()));
 
         // Receiver
         if (sbdh.getReceiver().size() == 0)
-            throw new SbdhException("Receiver not available.");
+            throw new EnvelopeException("Receiver not available.");
         header = header.setReceiverIdentifier(new ParticipantIdentifier(sbdh.getReceiver().get(0).getIdentifier().getValue()));
 
         // Identifier
@@ -131,12 +131,12 @@ public class HeaderHelper extends SbdhContext {
         return header;
     }
 
-    public static Header fromSbdh(InputStream inputStream) throws SbdhException {
+    public static Header fromSbdh(InputStream inputStream) throws EnvelopeException {
         try {
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             return fromSbdh(unmarshaller.unmarshal(new StreamSource(inputStream), StandardBusinessDocumentHeader.class).getValue());
         } catch (JAXBException e) {
-            throw new SbdhException(e.getMessage(), e);
+            throw new EnvelopeException(e.getMessage(), e);
         }
     }
 }

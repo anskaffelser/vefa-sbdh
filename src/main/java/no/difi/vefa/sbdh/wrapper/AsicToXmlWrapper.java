@@ -1,4 +1,4 @@
-package no.difi.vefa.sbdh.util;
+package no.difi.vefa.sbdh.wrapper;
 
 import no.difi.vefa.sbdh.api.ContentWithManifest;
 import org.apache.commons.codec.binary.Base64InputStream;
@@ -13,7 +13,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class AsicAsXmlInputStream extends FilterInputStream implements ContentWithManifest {
+public class AsicToXmlWrapper extends FilterInputStream implements ContentWithManifest {
 
     private final static byte[] preContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<asic:asic xmlns:asic=\"urn:etsi.org:specification:02918:v1.2.1\" id=\"asic\">\n".getBytes();
     private final static byte[] postContent = "</asic:asic>".getBytes();
@@ -27,7 +27,7 @@ public class AsicAsXmlInputStream extends FilterInputStream implements ContentWi
         }});
     }};
 
-    public AsicAsXmlInputStream(InputStream inputStream) {
+    public AsicToXmlWrapper(InputStream inputStream) {
         super(new SequenceInputStream(Collections.enumeration(Arrays.asList(
                 new ByteArrayInputStream(preContent),
                 new Base64InputStream(inputStream, true, 75, "\n".getBytes()),

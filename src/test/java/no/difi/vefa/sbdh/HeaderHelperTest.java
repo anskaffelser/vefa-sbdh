@@ -4,11 +4,9 @@ import no.difi.vefa.peppol.common.model.DocumentTypeIdentifier;
 import no.difi.vefa.peppol.common.model.InstanceIdentifier;
 import no.difi.vefa.peppol.common.model.ParticipantIdentifier;
 import no.difi.vefa.peppol.common.model.ProcessIdentifier;
-import no.difi.vefa.sbdh.lang.SbdhException;
+import no.difi.vefa.sbdh.lang.EnvelopeException;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
 import java.util.Date;
 
@@ -57,23 +55,23 @@ public class HeaderHelperTest {
         new HeaderHelper();
     }
 
-    @Test(expectedExceptions = SbdhException.class)
-    public void toSbdhWithoutSender() throws SbdhException {
+    @Test(expectedExceptions = EnvelopeException.class)
+    public void toSbdhWithoutSender() throws EnvelopeException {
         HeaderHelper.toSbdh(header.setSenderIdentifier(null));
     }
 
-    @Test(expectedExceptions = SbdhException.class)
-    public void toSbdhWithoutReceiver() throws SbdhException {
+    @Test(expectedExceptions = EnvelopeException.class)
+    public void toSbdhWithoutReceiver() throws EnvelopeException {
         HeaderHelper.toSbdh(header.setReceiverIdentifier(null));
     }
 
-    @Test(expectedExceptions = SbdhException.class)
-    public void toSbdhWithoutProcess() throws SbdhException {
+    @Test(expectedExceptions = EnvelopeException.class)
+    public void toSbdhWithoutProcess() throws EnvelopeException {
         HeaderHelper.toSbdh(header.setProcessIdentifier(null));
     }
 
-    @Test(expectedExceptions = SbdhException.class)
-    public void toSbdhWithoutDocumentType() throws SbdhException {
+    @Test(expectedExceptions = EnvelopeException.class)
+    public void toSbdhWithoutDocumentType() throws EnvelopeException {
         HeaderHelper.toSbdh(header.setDocumentTypeIdentifier(null));
     }
 }

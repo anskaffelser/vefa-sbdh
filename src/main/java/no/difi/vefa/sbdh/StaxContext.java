@@ -4,9 +4,9 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 
 /**
- * Class containing resources to be available in other classes by inheritance.
+ * Class containing resources related to StAX to be available in other classes by inheritance.
  */
-abstract class StaxContext extends SbdhContext {
+abstract class StaxContext {
 
     protected static XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
     protected static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
