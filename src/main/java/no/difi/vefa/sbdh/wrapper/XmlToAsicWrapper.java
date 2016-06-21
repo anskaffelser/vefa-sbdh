@@ -2,27 +2,24 @@ package no.difi.vefa.sbdh.wrapper;
 
 import no.difi.vefa.sbdh.lang.EnvelopeException;
 import org.apache.commons.codec.binary.Base64OutputStream;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 
 public class XmlToAsicWrapper extends FilterOutputStream implements Runnable {
 
     private static final String ASIC_IDENT = "urn:etsi.org:specification:02918:v1.2.1::asic";
 
-    private static SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-
-    static {
-        saxParserFactory.setNamespaceAware(true);
-    }
+    private static XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
 
     private PipedOutputStream pipedOutputStream = new PipedOutputStream();
     private PipedInputStream pipedInputStream;
+
+    private XMLStreamReader source;
+    private boolean inside = false;
 
     public XmlToAsicWrapper(OutputStream outputStream) throws EnvelopeException {
         super(new Base64OutputStream(outputStream, false));
@@ -37,12 +34,37 @@ public class XmlToAsicWrapper extends FilterOutputStream implements Runnable {
 
     @Override
     public void run() {
+        boolean run = true;
         try {
-            SAXParser saxParser = saxParserFactory.newSAXParser();
-            saxParser.parse(pipedInputStream, new LocalDefaultHandler(out));
-        } catch (InterruptedIOException e) {
-            // No action.
-        } catch (SAXException | IOException | ParserConfigurationException e) {
+            source = xmlInputFactory.createXMLStreamReader(pipedInputStream);
+
+            do {
+                switch (source.getEventType()) {
+                    case XMLStreamConstants.START_ELEMENT:
+                        inside = ASIC_IDENT.equals(String.format("%s::%s", source.getNamespaceURI(), source.getLocalName()));
+                        break;
+
+                    case XMLStreamConstants.END_ELEMENT:
+                        if (inside) {
+                            inside = !ASIC_IDENT.equals(String.format("%s::%s", source.getNamespaceURI(), source.getLocalName()));
+                            run = false;
+                        }
+                        break;
+
+                    case XMLStreamConstants.CHARACTERS:
+                        if (inside) {
+                            out.write(source.getText().getBytes());
+                            // System.out.println(source.getText().replaceAll("[ \r\n]", ""));
+                        }
+                        break;
+                }
+
+            } while (run && source.hasNext() && source.next() > 0);
+
+            // Finish stream.
+            while (source.hasNext())
+                source.next();
+        } catch (XMLStreamException | IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
@@ -59,39 +81,11 @@ public class XmlToAsicWrapper extends FilterOutputStream implements Runnable {
 
     @Override
     public void close() throws IOException {
-        pipedOutputStream.close();
-    }
-
-    private class LocalDefaultHandler extends DefaultHandler {
-
-        private boolean inside = false;
-
-        private OutputStream outputStream;
-
-        public LocalDefaultHandler(OutputStream outputStream) {
-            this.outputStream = outputStream;
-        }
-
-        @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            inside = ASIC_IDENT.equals(String.format("%s::%s", uri, localName));
-        }
-
-        @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
-            inside = !ASIC_IDENT.equals(String.format("%s::%s", uri, localName));
-        }
-
-        @Override
-        public void characters(char[] ch, int start, int length) throws SAXException {
-            if (inside) {
-                try {
-                    outputStream.write(new String(ch, start, length).getBytes());
-                    System.out.println(new String(ch, start, length).replaceAll("[ \r\n]", ""));
-                } catch (IOException e) {
-                    throw new SAXException(e.getMessage(), e);
-                }
-            }
+        try {
+            pipedOutputStream.close();
+            source.close();
+        } catch (XMLStreamException e) {
+            throw new IOException(e.getMessage(), e);
         }
     }
 }
