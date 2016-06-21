@@ -11,11 +11,15 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 
-public class XmlToAsicWrapper extends FilterOutputStream {
+public class XmlToAsicWrapper extends FilterOutputStream implements Runnable {
 
     private static final String ASIC_IDENT = "urn:etsi.org:specification:02918:v1.2.1::asic";
 
     private static SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+
+    static {
+        saxParserFactory.setNamespaceAware(true);
+    }
 
     private PipedOutputStream pipedOutputStream = new PipedOutputStream();
     private PipedInputStream pipedInputStream;
@@ -24,24 +28,22 @@ public class XmlToAsicWrapper extends FilterOutputStream {
         super(new Base64OutputStream(outputStream, false));
 
         try {
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        pipedInputStream = new PipedInputStream(pipedOutputStream);
+            pipedInputStream = new PipedInputStream(pipedOutputStream);
+            new Thread(this).start();
+        } catch (IOException e) {
+            throw new EnvelopeException(e.getMessage(), e);
+        }
+    }
 
-                        saxParserFactory.setNamespaceAware(true);
-                        SAXParser saxParser = saxParserFactory.newSAXParser();
-                        saxParser.parse(pipedInputStream, new LocalDefaultHandler());
-                    } catch (InterruptedIOException e) {
-                        // No action.
-                    } catch (SAXException | IOException | ParserConfigurationException e) {
-                        throw new RuntimeException(e.getMessage(), e);
-                    }
-                }
-            }.start();
-        } catch (RuntimeException e) {
-            throw new EnvelopeException(e.getCause().getMessage(), e.getCause());
+    @Override
+    public void run() {
+        try {
+            SAXParser saxParser = saxParserFactory.newSAXParser();
+            saxParser.parse(pipedInputStream, new LocalDefaultHandler(out));
+        } catch (InterruptedIOException e) {
+            // No action.
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -64,6 +66,12 @@ public class XmlToAsicWrapper extends FilterOutputStream {
 
         private boolean inside = false;
 
+        private OutputStream outputStream;
+
+        public LocalDefaultHandler(OutputStream outputStream) {
+            this.outputStream = outputStream;
+        }
+
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             inside = ASIC_IDENT.equals(String.format("%s::%s", uri, localName));
@@ -78,7 +86,8 @@ public class XmlToAsicWrapper extends FilterOutputStream {
         public void characters(char[] ch, int start, int length) throws SAXException {
             if (inside) {
                 try {
-                    out.write(new String(ch, start, length).getBytes());
+                    outputStream.write(new String(ch, start, length).getBytes());
+                    System.out.println(new String(ch, start, length).replaceAll("[ \r\n]", ""));
                 } catch (IOException e) {
                     throw new SAXException(e.getMessage(), e);
                 }
