@@ -20,7 +20,8 @@ public class SbdhExtractorTest {
     public void simple() throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        Header header = sbdhFactory.extract(getClass().getResourceAsStream("/peppol-bis-invoice-sbdh.xml"), byteArrayOutputStream);
+        Header header = sbdhFactory.extract(
+                getClass().getResourceAsStream("/peppol-bis-invoice-sbdh.xml"), byteArrayOutputStream);
 
         Assert.assertNotNull(header);
 
@@ -32,6 +33,9 @@ public class SbdhExtractorTest {
                 new StreamSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())),
                 InvoiceType.class
         );
-        Assert.assertEquals(o.getValue().getCustomizationID().getValue(), "urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0");
+        Assert.assertEquals(
+                o.getValue().getCustomizationID().getValue(),
+                "urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0"
+        );
     }
 }

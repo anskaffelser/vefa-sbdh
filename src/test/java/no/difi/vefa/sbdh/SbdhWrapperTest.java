@@ -4,7 +4,6 @@ import no.difi.vefa.peppol.common.model.DocumentTypeIdentifier;
 import no.difi.vefa.peppol.common.model.ParticipantIdentifier;
 import no.difi.vefa.peppol.common.model.ProcessIdentifier;
 import no.difi.vefa.sbdh.lang.EnvelopeException;
-import no.difi.vefa.sbdh.wrapper.AsicToXmlWrapper;
 import org.testng.annotations.Test;
 
 import java.io.IOException;

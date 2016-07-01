@@ -28,7 +28,7 @@ public class HeaderTest {
         Assert.assertNotNull(header.hashCode());
 
         Assert.assertTrue(header.equals(header));
-        Assert.assertFalse(header.equals(null));
+        Assert.assertNotNull(header);
         Assert.assertFalse(header.equals(new Object()));
         Assert.assertTrue(header.equals(header.setProcessIdentifier(new ProcessIdentifier("urn:www.cenbii.eu:profile:bii04:ver1.0"))));
         Assert.assertFalse(header.equals(header.setCreationTimestamp(new Date())));

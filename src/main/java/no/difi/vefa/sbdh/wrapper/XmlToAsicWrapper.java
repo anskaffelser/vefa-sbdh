@@ -58,8 +58,9 @@ public class XmlToAsicWrapper extends FilterOutputStream implements Runnable {
                         }
                         break;
                 }
-
             } while (run && source.hasNext() && source.next() > 0);
+
+            out.flush();
 
             // Finish stream.
             while (source.hasNext())
@@ -82,8 +83,13 @@ public class XmlToAsicWrapper extends FilterOutputStream implements Runnable {
     @Override
     public void close() throws IOException {
         try {
-            pipedOutputStream.close();
             source.close();
+
+            // pipedOutputStream.flush();
+            pipedOutputStream.close();
+
+            // out.flush();
+            // out.close();
         } catch (XMLStreamException e) {
             throw new IOException(e.getMessage(), e);
         }
