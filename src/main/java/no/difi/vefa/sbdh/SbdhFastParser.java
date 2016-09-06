@@ -41,6 +41,7 @@ class SbdhFastParser extends SbdhContext implements SbdhParser {
      * @param inputStream the inputstream containing the XML
      * @return an instance of StandardBusinessDocumentHeader if found, otherwise null.
      */
+    @Override
     public StandardBusinessDocumentHeader parse(InputStream inputStream) {
 
         StandardBusinessDocumentHeader standardBusinessDocumentHeader;

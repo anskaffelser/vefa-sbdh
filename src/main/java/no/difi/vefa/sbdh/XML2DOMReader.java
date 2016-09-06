@@ -82,7 +82,7 @@ class XML2DOMReader extends DefaultHandler {
         startElementCounter++;
 
         // If this is the element we want to parse, activate parsing
-        if (!parsingActivated && qName.equals(elementToRead)) {
+        if (!parsingActivated && name.equals(elementToRead)) {
             parsingActivated = true;
         }
 
@@ -123,7 +123,7 @@ class XML2DOMReader extends DefaultHandler {
             return;
         }
         myCurrentNode = myCurrentNode.getParentNode();
-        if (elementToRead.equals(qName)) {
+        if (elementToRead.equals(name)) {
             stopSaxParsing();
         }
     }
@@ -166,14 +166,17 @@ class XML2DOMReader extends DefaultHandler {
     }
 
     // For the handlers below, use your usual logging facilities.
+    @Override
     public void error(SAXParseException e) {
         throw new IllegalStateException("Error at line " + e.getLineNumber() + ", column " + e.getColumnNumber() + " : " + e.getMessage(), e);
     }
 
+    @Override
     public void fatalError(SAXParseException e) {
         throw new IllegalStateException("Fatal error at line " + e.getLineNumber() + ", column " + e.getColumnNumber() + " : " + e.getMessage(), e);
     }
 
+    @Override
     public void warning(SAXParseException e) {
         System.err.println("Warning : " + e.getMessage());
     }
@@ -214,6 +217,7 @@ class XML2DOMReader extends DefaultHandler {
     /**
      * Custom Exception used to abort the SAX call back parser.
      */
+    @SuppressWarnings("serial")
     private class StopSaxParserException extends SAXException {
     }
 }
