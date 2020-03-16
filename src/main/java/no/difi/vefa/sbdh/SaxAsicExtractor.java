@@ -30,6 +30,12 @@ class SaxAsicExtractor implements AsicExtractor {
      */
     boolean decodeFromBase64 = true;
 
+    private String startElementName;
+
+    public SaxAsicExtractor(String startElementName) {
+        this.startElementName = startElementName;
+    }
+
     @Override
     public boolean isDecodeFromBase64() {
         return decodeFromBase64;
@@ -47,7 +53,7 @@ class SaxAsicExtractor implements AsicExtractor {
         // Decodes rather than encodes the ouput data
         OutputStream decodingOutputStream = createDecodingOutputStream(outputStream);
 
-        AsicHandler asicHandler = new AsicHandler(decodingOutputStream);
+        AsicHandler asicHandler = new AsicHandler(startElementName, decodingOutputStream);
 
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         saxParserFactory.setNamespaceAware(true);
@@ -84,13 +90,16 @@ class SaxAsicExtractor implements AsicExtractor {
      * SAX implementation, which will extract the base64 encoded ASiC archive and write the contents
      * to the supplied OutputStream.
      */
-    protected static class AsicHandler extends DefaultHandler {
+    static class AsicHandler extends DefaultHandler {
 
         boolean currentElementIsAsicPayload = false;
 
-        OutputStream outputStreamWriter;
+        private String startElementName;
 
-        public AsicHandler(OutputStream outputStreamWriter) {
+        private OutputStream outputStreamWriter;
+
+        AsicHandler(String startElementName, OutputStream outputStreamWriter) {
+            this.startElementName = startElementName;
             this.outputStreamWriter = outputStreamWriter;
         }
 
@@ -101,8 +110,9 @@ class SaxAsicExtractor implements AsicExtractor {
             }
 
             // Found the <asic:asic> element, start handling the characters
-            if (localName.equalsIgnoreCase("asic")) {
-                currentElementIsAsicPayload = true;
+            String mimeType = attributes.getValue("mimeType");
+            if (localName.equalsIgnoreCase(startElementName)) {
+                currentElementIsAsicPayload = mimeType == null || mimeType.equalsIgnoreCase("application/vnd.etsi.asic-3+zip");
             }
         }
 
@@ -127,7 +137,7 @@ class SaxAsicExtractor implements AsicExtractor {
 
         @Override
         public void endElement(String uri, String localName, String qname) {
-            if (localName.equalsIgnoreCase("asic")) {
+            if (localName.equalsIgnoreCase(startElementName)) {
                 currentElementIsAsicPayload = false;
                 // We are done, never mind terminating the parsing, only two more elements left
             }

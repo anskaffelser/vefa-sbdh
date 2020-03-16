@@ -13,6 +13,10 @@ public class AsicExtractorFactory {
 
     /** Provides the default AsicExtractor */
     public static AsicExtractor defaultAsicExtractor() {
-        return new SaxAsicExtractor();
+        return new SaxAsicExtractor("asic");
+    }
+
+    public static AsicExtractor asicExtractor(String startElementName) {
+        return new SaxAsicExtractor(startElementName);
     }
 }
