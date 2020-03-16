@@ -4,6 +4,7 @@ import no.difi.vefa.sbdh.api.SbdhParser;
 import org.testng.annotations.DataProvider;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -20,14 +21,13 @@ public class SampleDataProvider {
 
     public static final String SAMPLE_ASIC = "sample-asic.asice";
     public static final String SAMPLE_SBD_XML = "sample-sbd.xml";
+    public static final String SAMPLE_SBD_BC_XML = "sample-sbd-with-BinaryContent.xml";
     public static final String SAMPLE_SBD_XML_WITH_NS = "sample-sbd-ns.xml";
 
     @DataProvider(name = "sampleData")
     public static Object[][] creatAsicArchive() {
 
-
-        InputStream asicInputStream = SampleDataProvider.class.getClassLoader().getResourceAsStream(SAMPLE_ASIC);
-        assertNotNull(asicInputStream, "Unable to locate " + SAMPLE_ASIC + " in class path");
+        InputStream asicInputStream = getStream(SAMPLE_ASIC);
 
         InputStream sbdhAsStream = SampleDataProvider.class.getClassLoader().getResourceAsStream("sample-sbdh-ns.xml");
         assertNotNull(sbdhAsStream, "Unable to locate sample-sbdh.xml in class path");
@@ -46,18 +46,21 @@ public class SampleDataProvider {
 
     @DataProvider(name = "sampleSbd")
     public static Object[][] sampleSbd() {
-        InputStream sbdStream = SampleDataProvider.class.getClassLoader().getResourceAsStream(SAMPLE_SBD_XML);
-        assertNotNull(sbdStream, "Unable to locate " + SAMPLE_SBD_XML + " in class path");
-
+        InputStream sbdStream = getStream(SAMPLE_SBD_XML);
 
         return new Object[][]{ { sbdStream } };
     }
     
+    @DataProvider(name = "sampleSbdBinaryContent")
+    public static Object[][] sampleSbdBinaryContent() {
+        InputStream sbdStream = getStream(SAMPLE_SBD_BC_XML);
+
+        return new Object[][]{ { sbdStream } };
+    }
+
     @DataProvider(name = "sampleSbdWithNS")
     public static Object[][] sampleSbdWithNS() {
-        InputStream sbdStream2 = SampleDataProvider.class.getClassLoader().getResourceAsStream(SAMPLE_SBD_XML_WITH_NS);
-        assertNotNull(sbdStream2, "Unable to locate " + SAMPLE_SBD_XML_WITH_NS + " in class path");
-
+        InputStream sbdStream2 = getStream(SAMPLE_SBD_XML_WITH_NS);
 
         return new Object[][]{ { sbdStream2 } };
     }
@@ -76,5 +79,11 @@ public class SampleDataProvider {
         return new Object[][]{{file}};
     }
 
+    private static InputStream getStream(String resourceName) {
+        InputStream inputStream = SampleDataProvider.class.getClassLoader().getResourceAsStream(resourceName);
+        assertNotNull(inputStream, "Unable to locate " + resourceName + " in class path");
+
+        return new BufferedInputStream(inputStream);
+    }
 }
 

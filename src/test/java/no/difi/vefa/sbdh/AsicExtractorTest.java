@@ -5,10 +5,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -97,5 +103,15 @@ public class AsicExtractorTest {
 
         assertTrue(asicManifestSeen);
 
+    }
+
+    @Test(dataProvider = "sampleSbdBinaryContent", dataProviderClass = SampleDataProvider.class)
+    public void testBinaryContent(InputStream inputStream) throws IOException {
+        AsicExtractor asicExtractor = AsicExtractorFactory.asicExtractor("BinaryContent");
+
+        File tempFile = File.createTempFile("binaryContent", ".zip");
+        asicExtractor.extractAsic(inputStream, new BufferedOutputStream(new FileOutputStream( tempFile)));
+
+        assertEquals(tempFile.length(), 6334, "file size differ");
     }
 }
